@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, ArrowRight, Mail, Lock, User } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // 新增导入
 
 import { usePageTitle } from "@/hooks/use-page-title";
 
@@ -18,6 +19,7 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const { toast } = useToast();
+  const navigate = useNavigate(); // 初始化 navigate
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export default function Auth() {
           title: "注册成功",
           description: "账号已创建，正在为您登录...",
         });
-        // Auto login after signup since auto-confirm is enabled
+        // 注册成功后尝试自动登录
         await handleLogin(e);
       }
     } catch (err) {
@@ -85,8 +87,19 @@ export default function Auth() {
           title: "登录失败",
           description: error.message === "Invalid login credentials" ? "邮箱或密码错误" : error.message,
         });
+      } else {
+        // --- 修复部分开始 ---
+        // 登录成功，显示提示并跳转
+        toast({
+            title: "登录成功",
+            description: "欢迎回来，正在进入平台...",
+        });
+        // 这里假设您的主页路由是 "/"，如果是 "/dashboard" 请自行修改
+        navigate("/"); 
+        // --- 修复部分结束 ---
       }
     } catch (err) {
+      console.error(err); // 方便调试
       toast({
         variant: "destructive",
         title: "登录失败",
