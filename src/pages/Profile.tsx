@@ -9,8 +9,10 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { User, Scale, Ruler, FileText, ShieldCheck, LogOut, Save, Award } from "lucide-react";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 export default function Profile() {
+  usePageTitle("个人中心");
   const { user, profile, signOut, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);

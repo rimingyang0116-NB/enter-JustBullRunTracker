@@ -9,7 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, ArrowRight, Mail, Lock, User } from "lucide-react";
 
+import { usePageTitle } from "@/hooks/use-page-title";
+
 export default function Auth() {
+  usePageTitle("登录/注册");
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,52 +21,80 @@ export default function Auth() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          role: 'member',
-        },
-        emailRedirectTo: window.location.origin,
-      },
-    });
-
-    if (error) {
+    
+    if (password.length < 6) {
       toast({
         variant: "destructive",
         title: "注册失败",
-        description: error.message,
+        description: "密码长度至少需要6位字符",
       });
-    } else {
-      toast({
-        title: "注册成功",
-        description: "账号已创建，正在为您登录...",
-      });
-      // Auto login after signup since auto-confirm is enabled
-      await handleLogin(e);
+      return;
     }
-    setLoading(false);
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            role: 'member',
+          },
+          emailRedirectTo: window.location.origin,
+        },
+      });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "注册失败",
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: "注册成功",
+          description: "账号已创建，正在为您登录...",
+        });
+        // Auto login after signup since auto-confirm is enabled
+        await handleLogin(e);
+      }
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "注册失败",
+        description: "发生未知错误，请稍后再试",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "登录失败",
+          description: error.message === "Invalid login credentials" ? "邮箱或密码错误" : error.message,
+        });
+      }
+    } catch (err) {
       toast({
         variant: "destructive",
         title: "登录失败",
-        description: error.message,
+        description: "发生未知错误，请稍后再试",
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

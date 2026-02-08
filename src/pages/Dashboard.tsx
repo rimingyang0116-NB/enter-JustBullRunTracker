@@ -33,7 +33,10 @@ interface RecentLog {
   };
 }
 
+import { usePageTitle } from "@/hooks/use-page-title";
+
 export default function Dashboard() {
+  usePageTitle("首页");
   const { user, profile } = useAuth();
   const [stats, setStats] = useState<Stats>({ totalDistance: 0, totalDays: 0, weeklyDistance: 0 });
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);

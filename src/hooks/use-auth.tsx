@@ -56,6 +56,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchProfile(userId: string) {
     try {
+      // Add a small delay to ensure trigger has finished
+      // This helps with race conditions during signup
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -63,7 +65,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle();
 
       if (error) throw error;
-      setProfile(data as Profile);
+      
+      if (!data) {
+        // If profile not found, retry once after a short delay
+        setTimeout(async () => {
+          const { data: retryData } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .maybeSingle();
+          if (retryData) setProfile(retryData as Profile);
+        }, 1000);
+      } else {
+        setProfile(data as Profile);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
     } finally {

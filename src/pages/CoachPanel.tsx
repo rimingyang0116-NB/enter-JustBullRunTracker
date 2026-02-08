@@ -10,8 +10,10 @@ import { Calendar, Target, Users, ShieldCheck, Plus, ArrowRight } from "lucide-r
 import { format, startOfWeek, endOfWeek } from "date-fns";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 export default function CoachPanel() {
+  usePageTitle("教练后台");
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);

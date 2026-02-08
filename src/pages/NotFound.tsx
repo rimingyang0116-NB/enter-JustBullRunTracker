@@ -1,7 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 const NotFound = () => {
+  usePageTitle("404 - 页面未找到");
   const location = useLocation();
 
   useEffect(() => {

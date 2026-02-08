@@ -10,8 +10,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { MapPin, MessageSquare, Smile, Zap, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 export default function CheckIn() {
+  usePageTitle("每日打卡");
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();

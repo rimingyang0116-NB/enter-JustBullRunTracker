@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Trophy, Medal, Crown, Star, TrendingUp } from "lucide-react";
 import { format, startOfMonth, endOfMonth } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 interface LeaderboardItem {
   user_id: string;
@@ -25,6 +26,7 @@ interface RunningLog {
 }
 
 export default function Leaderboard() {
+  usePageTitle("排行榜");
   const [dailyKM, setDailyKM] = useState<LeaderboardItem[]>([]);
   const [monthlyKM, setMonthlyKM] = useState<LeaderboardItem[]>([]);
   const [monthlyDays, setMonthlyDays] = useState<LeaderboardItem[]>([]);
