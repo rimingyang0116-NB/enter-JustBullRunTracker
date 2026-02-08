@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Home, Trophy, PlusCircle, User, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -19,12 +20,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <main className="container max-w-md mx-auto px-4 pt-6">
-        {children}
-      </main>
+    <div className="min-h-screen bg-background pb-24">
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="container max-w-md mx-auto px-4 pt-6"
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-border px-6 py-2 flex justify-around items-center z-50 shadow-lg">
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border px-6 py-3 flex justify-around items-center z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
@@ -34,19 +44,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
               key={item.path}
               to={item.path}
               className={cn(
-                "flex flex-col items-center gap-1 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground",
-                item.primary && "relative -top-4"
+                "flex flex-col items-center gap-1 transition-all duration-300",
+                isActive ? "text-primary scale-110" : "text-muted-foreground hover:text-primary/70",
+                item.primary && "relative -top-6"
               )}
             >
               <div className={cn(
-                "p-2 rounded-full transition-all",
-                item.primary && "bg-primary text-white shadow-glow scale-125",
+                "p-2.5 rounded-2xl transition-all duration-300",
+                item.primary && "bg-primary text-white shadow-premium scale-125 hover:scale-135 active:scale-110",
                 isActive && !item.primary && "bg-primary/10"
               )}>
-                <Icon size={item.primary ? 28 : 24} />
+                <Icon size={item.primary ? 28 : 22} strokeWidth={isActive ? 2.5 : 2} />
               </div>
-              {!item.primary && <span className="text-xs font-medium">{item.label}</span>}
+              {!item.primary && (
+                <span className={cn(
+                  "text-[10px] font-bold tracking-tight transition-opacity duration-300",
+                  isActive ? "opacity-100" : "opacity-70"
+                )}>
+                  {item.label}
+                </span>
+              )}
             </Link>
           );
         })}
