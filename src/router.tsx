@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import CheckIn from "./pages/CheckIn";
 import Leaderboard from "./pages/Leaderboard";
 import CoachPanel from "./pages/CoachPanel";
+import Profile from "./pages/Profile";
 import { Layout } from "./components/Layout";
 import { useAuth } from "./hooks/use-auth";
 
@@ -70,18 +71,7 @@ export const routers = [
     name: 'profile',
     element: (
       <ProtectedRoute>
-        <div className="space-y-6">
-          <h1 className="text-2xl font-black italic tracking-tighter">个人中心</h1>
-          <div className="p-6 bg-card rounded-2xl shadow-sm border border-border/50 text-center">
-            <p className="text-muted-foreground mb-4">更多功能正在开发中...</p>
-            <button 
-              onClick={() => window.location.href = '/auth'} 
-              className="text-primary font-bold"
-            >
-              退出登录
-            </button>
-          </div>
-        </div>
+        <Profile />
       </ProtectedRoute>
     ),
   },

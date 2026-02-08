@@ -16,7 +16,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   if (profile?.role === 'coach') {
-    navItems.push({ icon: Settings, label: "教练", path: "/coach" });
+    navItems.splice(3, 0, { icon: Settings, label: "教练", path: "/coach" });
   }
 
   return (
@@ -50,11 +50,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
               )}
             >
               <div className={cn(
-                "p-2.5 rounded-2xl transition-all duration-300",
+                "p-2.5 rounded-2xl transition-all duration-300 relative",
                 item.primary && "bg-primary text-white shadow-premium scale-125 hover:scale-135 active:scale-110",
                 isActive && !item.primary && "bg-primary/10"
               )}>
                 <Icon size={item.primary ? 28 : 22} strokeWidth={isActive ? 2.5 : 2} />
+                {item.path === '/coach' && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-background" />
+                )}
               </div>
               {!item.primary && (
                 <span className={cn(

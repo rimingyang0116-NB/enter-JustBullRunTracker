@@ -1,0 +1,9 @@
+-- Add new columns to profiles table
+alter table public.profiles 
+add column if not exists height numeric,
+add column if not exists weight numeric,
+add column if not exists bio text,
+add column if not exists coach_application_status text default 'none' check (coach_application_status in ('none', 'pending', 'approved', 'rejected'));
+
+-- Update RLS for profiles to allow users to update their own new fields
+-- (Existing policy "Users can update own profile." should already cover this, but let's be sure)

@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Calendar, Target, Users, ShieldCheck, Plus, ArrowRight } from "lucide-react";
 import { format, startOfWeek, endOfWeek } from "date-fns";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function CoachPanel() {
   const { user, profile } = useAuth();
@@ -22,12 +23,21 @@ export default function CoachPanel() {
 
   if (profile?.role !== 'coach') {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-10 text-center space-y-4">
-        <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center text-muted-foreground">
-          <ShieldCheck size={40} />
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-10 text-center space-y-6">
+        <div className="w-24 h-24 bg-secondary rounded-[2rem] flex items-center justify-center text-muted-foreground shadow-inner">
+          <ShieldCheck size={48} />
         </div>
-        <h2 className="text-xl font-black italic uppercase tracking-tight">权限不足</h2>
-        <p className="text-sm text-muted-foreground font-medium">只有教练可以访问此管理后台</p>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-black italic uppercase tracking-tight">权限不足</h2>
+          <p className="text-sm text-muted-foreground font-medium max-w-[240px] mx-auto">
+            只有认证教练可以访问此管理后台。如果您想带领大家跑步，请先提交申请。
+          </p>
+        </div>
+        <Link to="/profile">
+          <Button className="rounded-2xl font-black italic uppercase tracking-tight px-8 h-12 shadow-premium">
+            前往个人中心申请
+          </Button>
+        </Link>
       </div>
     );
   }

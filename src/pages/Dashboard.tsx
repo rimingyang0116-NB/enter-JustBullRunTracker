@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Trophy, Calendar, MapPin, Flame, TrendingUp, ChevronRight, User } from "lucide-react";
+import { Trophy, Calendar, MapPin, Flame, TrendingUp, ChevronRight, User, ShieldCheck } from "lucide-react";
 import { format, startOfWeek, endOfWeek } from "date-fns";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -155,16 +155,30 @@ export default function Dashboard() {
             今天也是充满活力的一天
           </p>
         </motion.div>
-        <motion.div variants={item} className="relative">
-          <div className="w-14 h-14 bg-secondary rounded-2xl flex items-center justify-center overflow-hidden border-2 border-primary/10 shadow-sm">
-            {profile?.avatar_url ? (
-              <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
-            ) : (
-              <User className="text-primary" size={28} />
-            )}
-          </div>
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center">
-            <Flame size={10} className="text-white" fill="currentColor" />
+        <motion.div variants={item} className="flex items-center gap-3">
+          {profile?.role === 'coach' && (
+            <Link to="/coach">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-primary/10 text-primary p-2 rounded-xl border border-primary/20 flex items-center gap-2"
+              >
+                <ShieldCheck size={18} fill="currentColor" />
+                <span className="text-[10px] font-black italic uppercase">Coach</span>
+              </motion.div>
+            </Link>
+          )}
+          <div className="relative">
+            <div className="w-14 h-14 bg-secondary rounded-2xl flex items-center justify-center overflow-hidden border-2 border-primary/10 shadow-sm">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+              ) : (
+                <User className="text-primary" size={28} />
+              )}
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center">
+              <Flame size={10} className="text-white" fill="currentColor" />
+            </div>
           </div>
         </motion.div>
       </header>
